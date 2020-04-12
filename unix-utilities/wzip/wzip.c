@@ -1,5 +1,12 @@
+/*
+ * wzip.c --- This program compresses files using the
+ *            run-length encoding (RLE) algorithm.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
+
+void write_compressed(int *count, char *character);
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
@@ -26,18 +33,20 @@ int main(int argc, char *argv[]) {
         count++;
         prev = cur;
       } else {
-        fwrite(&count, sizeof (int), 1, stdout);
-        fwrite(&prev, sizeof (char), 1, stdout);
+        write_compressed(&count, &prev);
         count = 1;
         prev = cur;
       }
     }
-
     fclose(fs);
   }
 
-  fwrite(&count, sizeof (int), 1, stdout);
-  fwrite(&prev, sizeof (char), 1, stdout);
+  write_compressed(&count, &prev);
 
   return 0;
+}
+
+void write_compressed(int *count, char *character) {
+  fwrite(count, sizeof (int), 1, stdout);
+  fwrite(character, sizeof (char), 1, stdout);
 }
