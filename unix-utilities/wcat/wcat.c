@@ -1,18 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define BUFSIZE 200
-
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     return 0;
   }
 
-  char *buf = malloc(BUFSIZE); 
-  if (buf == NULL) {
-    fprintf(stderr, "wcat: failed to allocate memory\n");
-    exit(1);
-  }
+  char *buf = NULL;
+  size_t buf_size = 0;
 
   for (int i = 1; i < argc; i++) {
     FILE *fp = fopen(argv[i], "r");
@@ -22,7 +17,7 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
 
-    while (fgets(buf, BUFSIZE, fp) != NULL) {
+    while (getline(&buf, &buf_size, fp) != -1) {
       printf("%s", buf);
     }
 
