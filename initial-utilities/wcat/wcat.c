@@ -25,7 +25,11 @@ int main(int argc, char *argv[]) {
     while (fgets(buf, BUFSIZE, fp) != NULL) {
       printf("%s", buf);
     }
+
+    fclose(fp);
   }
+
+  free(buf);
 
   return 0;
 }
