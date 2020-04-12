@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXBUFSIZE 200
-
 void search_file(char *search_term, FILE *fs);
 
 int main(int argc, char *argv[]) {
@@ -13,9 +11,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (argc < 3) {
-
     search_file(argv[1], stdin);
-    
   } else {
     for (int i = 2; i < argc; i++) {
       FILE *fs = fopen(argv[i], "r");
@@ -35,14 +31,10 @@ int main(int argc, char *argv[]) {
 }
 
 void search_file(char *search_term, FILE *fs) {
-  char *buf = malloc(MAXBUFSIZE);
+  char *buf = NULL;
+  size_t buf_size = 0;
 
-  if (buf == NULL) {
-    fprintf(stderr, "Error trying to allocate the buffer");
-    exit(1);
-  }
-
-  while (fgets(buf, MAXBUFSIZE, fs) != NULL) {
+  while (getline(&buf, &buf_size, fs) != -1) {
     if (strstr(buf, search_term) != NULL) {
       printf("%s", buf);
     }
